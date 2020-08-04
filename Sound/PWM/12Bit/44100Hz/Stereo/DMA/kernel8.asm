@@ -43,19 +43,21 @@ mov w0,(PERIPHERAL_BASE + CM_BASE) and $0000FFFF
 mov w1,(PERIPHERAL_BASE + CM_BASE) and $FFFF0000
 orr w0,w0,w1
 mov w1,CM_PASSWORD
-orr w1,w1,$2000 ; Bits 0..11 Fractional Part Of Divisor = 0, Bits 12..23 Integer Part Of Divisor = 2
+mov w2,$2C4A ; Bits 0..11 Fractional Part Of Divisor = 3146, Bits 12..23 Integer Part Of Divisor = 2
+orr w1,w1,w2
 str w1,[x0,CM_PWMDIV]
 
 mov w1,CM_PASSWORD
 orr w1,w1,CM_ENAB
-orr w1,w1,CM_SRC_OSCILLATOR + CM_SRC_PLLCPER ; Use 650MHz PLLC Clock
+orr w1,w1,CM_SRC_PLLDPER ; Use 1000MHz PLLD Clock
+orr w1,w1,CM_MASH_1 ; Use 1-stage MASH
 str w1,[x0,CM_PWMCTL]
 
 ; Set PWM
 mov w0,(PERIPHERAL_BASE + PWM_BASE) and $0000FFFF
 mov w1,(PERIPHERAL_BASE + PWM_BASE) and $FFFF0000
 orr w0,w0,w1
-mov w1,$1624 ; Range = 12bit 44100Hz Stereo
+mov w1,$1000 ; Range = 12bit 44100Hz Stereo
 str w1,[x0,PWM_RNG1]
 str w1,[x0,PWM_RNG2]
 
